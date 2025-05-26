@@ -3,9 +3,11 @@ package com.labs.collectionManager.service.impl;
 import com.labs.collectionManager.model.user.Role;
 import com.labs.collectionManager.model.user.User;
 import com.labs.collectionManager.service.UserService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class UserServiceImpl implements UserService {
     @Override
     public User getByLogin(String login) {

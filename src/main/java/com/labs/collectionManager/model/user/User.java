@@ -1,6 +1,7 @@
 package com.labs.collectionManager.model.user;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
@@ -11,16 +12,25 @@ public class User {
 
     private Long id;
 
-    @NonNull
+    @NotNull
     @NotEmpty
     private String login;
+
+    @NotNull
+    private String firstName;
+
+    @NotNull
+    private String lastName;
 
     @Builder.Default
     private Role role = Role.ROLE_USER;
 
-    @NonNull
+    @NotNull
     private String password;
 
-    @Builder.Default
-    private boolean isVerified = false;
+    @NotNull
+    @NotEmpty
+    private String email;
+
+    private boolean isVerified;
 }
