@@ -32,5 +32,9 @@ public class User {
     @NotEmpty
     private String email;
 
+    @NotNull
+    @Builder.Default
+    private Status status = Status.ACTIVE;
+
     private boolean isVerified;
 }
