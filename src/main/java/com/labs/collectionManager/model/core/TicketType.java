@@ -1,5 +1,7 @@
 package com.labs.collectionManager.model.core;
 
+
+
 public enum TicketType {
     VIP,
     USUAL,

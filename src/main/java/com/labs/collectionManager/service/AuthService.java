@@ -1,10 +1,14 @@
 package com.labs.collectionManager.service;
 
-import com.labs.collectionManager.web.dto.auth.JwtRequest;
-import com.labs.collectionManager.web.dto.auth.JwtResponse;
+import com.labs.collectionManager.web.controller.auth.AuthenticationRequest;
+import com.labs.collectionManager.web.controller.auth.AuthenticationResponse;
+import com.labs.collectionManager.web.controller.auth.RegisterRequest;
+import org.springframework.http.ResponseEntity;
+
 
 public interface AuthService {
-    JwtResponse login(JwtRequest loginRequest);
 
-    JwtResponse refresh(String refreshToken);
+    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest);
+    public AuthenticationResponse register(RegisterRequest registerRequest);
+
 }

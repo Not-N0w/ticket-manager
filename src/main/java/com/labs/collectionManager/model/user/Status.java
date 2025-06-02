@@ -1,5 +1,12 @@
 package com.labs.collectionManager.model.user;
 
+import jakarta.persistence.*;
+
+
 public enum Status {
-    ACTIVE, BLOCKED
+    ACTIVE, BLOCKED;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 }

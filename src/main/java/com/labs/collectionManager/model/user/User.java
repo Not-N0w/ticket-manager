@@ -1,40 +1,83 @@
 package com.labs.collectionManager.model.user;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-@Data
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+
 @Builder
-public class User {
+@Data
+@Entity
+@Table(name="users")
+@AllArgsConstructor
+@NoArgsConstructor
+public class User implements UserDetails {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
     @NotEmpty
-    private String login;
+    @Column(unique = true)
+    private String username;
 
     @NotNull
+    @Column(name = "first_name")
     private String firstName;
 
     @NotNull
+    @Column(name = "last_name")
     private String lastName;
 
-    @Builder.Default
-    private Role role = Role.ROLE_USER;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @NotNull
     private String password;
 
-    @NotNull
-    @NotEmpty
-    private String email;
 
     @NotNull
-    @Builder.Default
-    private Status status = Status.ACTIVE;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
-    private boolean isVerified;
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+
 }
