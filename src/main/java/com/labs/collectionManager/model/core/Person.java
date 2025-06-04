@@ -27,11 +27,13 @@ public class Person {
     private LocalDate birthday; // Поле не может быть null
     @Min(value = 0, message = "'Weight' value should be more than 0.")
     private double weight; // Значение поля должно быть больше 0
+
+    @Column(name = "passport_id")
     @NotNull
-    private String passportID; // Строка не может быть пустой, Поле может быть null
+    private String passportId; // Строка не может быть пустой, Поле может быть null
 
     @NotNull
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "location_id")
     private Location location; // Поле может быть null
 

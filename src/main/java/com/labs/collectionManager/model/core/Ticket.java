@@ -1,10 +1,12 @@
 package com.labs.collectionManager.model.core;
 
+import com.labs.collectionManager.model.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.GenerationTime;
 
 import java.time.LocalDateTime;
 
@@ -21,14 +23,16 @@ public class Ticket {
     private Long id;
 
     @NotNull
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "person_id")
     private Person person;
 
     @NotNull
     @Enumerated(EnumType.STRING) // is it ok?
+    @Column(name = "ticket_type")
     private TicketType ticketType;
 
+    @Column(name = "creation_date", insertable = false, updatable = false)
     @Generated
     private LocalDateTime creationDate;
 
@@ -42,7 +46,12 @@ public class Ticket {
     private boolean refundable;
 
     @NotNull
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @NotNull
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "coordinates_id")
     private Coordinates coordinates;
 }

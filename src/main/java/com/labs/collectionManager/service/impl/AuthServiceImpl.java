@@ -5,7 +5,6 @@ import com.labs.collectionManager.model.user.Status;
 import com.labs.collectionManager.model.user.User;
 import com.labs.collectionManager.repository.UserRepository;
 import com.labs.collectionManager.service.AuthService;
-import com.labs.collectionManager.service.JwtService;
 import com.labs.collectionManager.web.controller.auth.AuthenticationRequest;
 import com.labs.collectionManager.web.controller.auth.AuthenticationResponse;
 import com.labs.collectionManager.web.controller.auth.RegisterRequest;
@@ -20,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+    private final JwtServiceImpl jwtService;
     private final AuthenticationManager authenticationManager;
 
     @Override

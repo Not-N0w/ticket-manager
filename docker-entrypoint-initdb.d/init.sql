@@ -42,7 +42,7 @@ CREATE TABLE tickets (
                          coordinates_id INTEGER NOT NULL,
                          price INTEGER NOT NULL CHECK (price > 0),
                          refundable BOOLEAN NOT NULL,
-                         type VARCHAR(20) NOT NULL,
+                         ticket_type VARCHAR(20) NOT NULL,
                          person_id INTEGER NOT NULL,
                          user_id INTEGER NOT NULL,
                          FOREIGN KEY (coordinates_id) REFERENCES coordinates(id)

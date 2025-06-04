@@ -1,48 +1,23 @@
 package com.labs.collectionManager.service.impl;
 
-import com.labs.collectionManager.model.user.Role;
 import com.labs.collectionManager.model.user.User;
 import com.labs.collectionManager.repository.UserRepository;
 import com.labs.collectionManager.service.UserService;
-import lombok.AllArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
-    public User getByLogin(String login) {
-        return null;
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
     }
 
     @Override
-    public List<User> getAll() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public void update(User user) {
-
-    }
-
-
-    @Override
-    public void create(User user) {
-
-    }
-
-    @Override
-    public void setUserRole(Long userId, Role role) {
-
-    }
-
-    @Override
-    public void delete(Long userId) {
-
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username).orElse(null);
     }
 }
