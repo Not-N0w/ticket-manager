@@ -6,7 +6,7 @@ import { DownloadButton } from "@/components/ui/csv_converter/downlad-button";
 
 export default function TicketsPage() {
     return (
-        <div className="w-1/2 m-auto pt-10">
+        <div className="flex flex-col items-center gap-2 text-center w-1/2 m-auto">
             <div className="flex gap-4">
                 <Button variant="outline" size="sm" className="transition hover:text-lime-500 cursor-pointer">
                     <IconSquareRoundedPlus /> Add
