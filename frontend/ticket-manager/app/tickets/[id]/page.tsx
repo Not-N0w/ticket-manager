@@ -40,13 +40,13 @@ export default function TicketDetails({ params }: { params: { id: number } }) {
                     </div>
                 </div>
             </div>
-        
-            <Button variant="ghost" onClick={
+            
+            <Button variant="ghost" className="mt-10 text-gray-500 text-mf cursor-pointer" onClick={
                 router.back
             }>
-                <IconArrowLeftDashed/>Go back
+                <IconArrowLeftDashed /> back
             </Button>
-        
+
         </div>
     );
 }
