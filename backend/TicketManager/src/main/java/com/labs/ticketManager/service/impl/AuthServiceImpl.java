@@ -14,6 +14,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.HashSet;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -47,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
                 .lastName(registerRequest.getLastName())
                 .firstName(registerRequest.getFirstName())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .role(Role.ROLE_USER)
+                .roles(new HashSet<>(Collections.singleton(Role.ROLE_USER)))
                 .status(Status.ACTIVE)
                 .build();
         userRepository.save(user);

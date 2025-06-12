@@ -1,5 +1,6 @@
 package com.labs.ticketManager.repository;
 
+import com.labs.ticketManager.model.user.Role;
 import com.labs.ticketManager.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,16 +1,26 @@
 ALTER SYSTEM SET listen_addresses = '*';
 
 
+CREATE TABLE roles (
+                       id SERIAL PRIMARY KEY,
+                       name VARCHAR(50) UNIQUE NOT NULL CHECK (name <> '') -- Пример: 'ROLE_USER', 'ROLE_ADMIN'
+);
+
 CREATE TABLE users (
                        id SERIAL PRIMARY KEY,
                        username VARCHAR(30) NOT NULL UNIQUE CHECK (username <> ''),
                        password TEXT NOT NULL CHECK (password <> ''),
                        first_name VARCHAR(255) NOT NULL,
                        last_name VARCHAR(255) NOT NULL,
-                       role VARCHAR(20) NOT NULL,
-                       status VARCHAR(20) NOT NULL
+                       status VARCHAR(20) NOT NULL -- например: 'ACTIVE', 'BLOCKED'
 );
 
+CREATE TABLE user_roles (
+                            user_id INTEGER NOT NULL,
+                            role VARCHAR(50) NOT NULL,
+                            PRIMARY KEY (user_id, role),
+                            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
 
 CREATE TABLE locations (
                            id SERIAL PRIMARY KEY,
