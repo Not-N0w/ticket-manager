@@ -21,6 +21,36 @@ public class TicketServiceImpl implements TicketService {
     private final JwtService jwtService;
 
     @Override
+    public void update(Long id, Ticket ticket, String authHeader) {
+        User user = userService.getUserByUsername(jwtService.extractUsername(authHeader.substring(7)));
+        Ticket oldTicket = ticketRepository
+                            .findById(id.toString())
+                            .orElseThrow(() -> new RuntimeException("Ticket not found"));
+        if (!oldTicket.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You are not allowed to update this ticket");
+        }
+        oldTicket.setName(ticket.getName());
+        oldTicket.setPrice(ticket.getPrice());
+        oldTicket.setRefundable(ticket.isRefundable());
+        oldTicket.setTicketType(ticket.getTicketType());
+        oldTicket.setCoordinates(ticket.getCoordinates());
+        oldTicket.setPerson(ticket.getPerson());
+        ticketRepository.save(oldTicket);
+    }
+
+    @Override
+    public void delete(Long id, String authHeader) {
+        User user = userService.getUserByUsername(jwtService.extractUsername(authHeader.substring(7)));
+        Ticket oldTicket = ticketRepository
+                .findById(id.toString())
+                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+        if (!oldTicket.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You are not allowed to update this ticket");
+        }
+        ticketRepository.delete(oldTicket);
+    }
+
+    @Override
     public void create(Ticket ticket, String authHeader) {
         User user = userService.getUserByUsername(jwtService.extractUsername(authHeader.substring(7)));
         ticket.setUser(user);
@@ -35,13 +65,5 @@ public class TicketServiceImpl implements TicketService {
     }
 
 
-    @Override
-    public void update(Ticket ticket) {
 
-    }
-
-    @Override
-    public void delete(Long ticketId) {
-
-    }
 }

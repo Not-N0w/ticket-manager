@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { TicketsTable } from "@/components/ui/tickets/tickets-table";
 import { tickets } from "@/data/tickets"
 import { IconFileArrowLeft, IconSquareRoundedPlus } from "@tabler/icons-react";
-import { DownloadButton } from "@/components/ui/csv_converter/downlad-button";
 
 export default function TicketsPage() {
     return (
@@ -12,7 +11,6 @@ export default function TicketsPage() {
                     <IconSquareRoundedPlus /> Add
                 </Button>
 
-                <DownloadButton/>
 
                 <Button variant="outline" size="sm" className="transition hover:text-lime-500 cursor-pointer">
                     <IconFileArrowLeft /> Import from .csv

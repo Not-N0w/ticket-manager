@@ -11,7 +11,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/ticket")
+@RequestMapping("/api/v1/tickets")
 public class TicketController {
     private final TicketService ticketService;
     private final TicketMapper ticketMapper;
@@ -29,8 +29,12 @@ public class TicketController {
         ticketService.create(ticketMapper.toEntity(ticket), authHeader);
     }
 
-    @GetMapping("/hi")
-    public String str() {
-        return "hihi";
+    @PostMapping("/update/{id}")
+    public void create(
+            @PathVariable Long id,
+            @RequestBody RequestTicketDto ticket,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        ticketService.update(id, ticketMapper.toEntity(ticket), authHeader);
     }
 }

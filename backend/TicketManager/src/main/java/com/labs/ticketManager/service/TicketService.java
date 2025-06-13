@@ -7,6 +7,6 @@ import java.util.List;
 public interface TicketService {
     void create(Ticket ticket, String authHeader);
     List<Ticket> getAll();
-    void update(Ticket ticket);
-    void delete(Long ticketId);
+    void update(Long id, Ticket ticket, String authHeader);
+    void delete(Long ticketId, String authHeader);
 }

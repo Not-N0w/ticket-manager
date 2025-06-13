@@ -40,7 +40,6 @@ export const columns: ColumnDef<Ticket>[] = [
     {
         id: "actions",
         cell: function ActionCell({ row }) {
-            const payment = row.original
             const router = useRouter()
             const ticket = row.original
 

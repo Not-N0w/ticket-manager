@@ -19,7 +19,6 @@ import {
 import { Button } from "../button"
 import { Separator } from "@/components/ui/separator"
 
-const ROW_HEIGHT = 60
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
