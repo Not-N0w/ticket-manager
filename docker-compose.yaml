@@ -1,0 +1,44 @@
+services:
+  server:
+    depends_on:
+      postgres:
+        condition: service_healthy
+        restart: true
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.server
+    container_name: server-container
+    ports:
+      - "1805:1805"
+    healthcheck:
+      test: [ "CMD", "pgrep", "java" ]
+      interval: 10s
+      retries: 3
+    tty: true
+
+#  client:
+#    build:
+#      context: .
+#      dockerfile: docker/Dockerfile.client
+#    container_name: client-container
+#    ports:
+#      - "3000:3000"
+#    tty: true
+
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_DB: "ticketManagerDB"
+      POSTGRES_USER: "postgres_admin"
+      POSTGRES_PASSWORD: "postgres"
+    volumes:
+      -   ./database/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres_admin -d ticketManagerDB"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s

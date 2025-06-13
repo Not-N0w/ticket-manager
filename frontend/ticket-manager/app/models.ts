@@ -10,7 +10,7 @@ export interface Location {
 }
 
 export interface Person {
-  birthday: string // ISO 8601 (e.g. "2000-01-01")
+  birthday: string
   weight: number
   passportId: string
   location: Location
@@ -22,7 +22,20 @@ export interface Ticket {
   name: string
   price: number
   refundable: boolean
-  creationDate: string // ISO 8601 with time (e.g. "2025-06-11T12:00:00")
+  creationDate: string
   coordinates: Coordinates
   person: Person
 }
+
+
+export interface User {
+  id: number
+  username: string
+  firstName: string
+  lastName: string
+  roles: Role[]
+  status: Status
+}
+export type Role = "USER" | "ADMIN" | "SUPER_ADMIN"
+export type Status = "ACTIVE" | "BANNED"
+

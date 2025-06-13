@@ -9,14 +9,17 @@ import com.labs.ticketManager.web.controller.auth.AuthenticationRequest;
 import com.labs.ticketManager.web.controller.auth.AuthenticationResponse;
 import com.labs.ticketManager.web.controller.auth.RegisterRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.HashSet;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -27,18 +30,25 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getUsername(),
-                        authenticationRequest.getPassword()
-                )
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            authenticationRequest.getUsername(),
+                            authenticationRequest.getPassword()
+                    )
+            );
+        }
+        catch (AuthenticationException e) {
+            throw new AuthenticationException("Invalid password", e) {};
+        }
 
         var user = userRepository.findByUsername(authenticationRequest.getUsername())
-                .orElseThrow();
+                .orElseThrow(() -> new AuthenticationException("User with username '" + authenticationRequest.getUsername() + "' not found.") {
+                });
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .role(user.getRoles())
                 .build();
     }
 
@@ -53,10 +63,17 @@ public class AuthServiceImpl implements AuthService {
                 .roles(new HashSet<>(Collections.singleton(Role.ROLE_USER)))
                 .status(Status.ACTIVE)
                 .build();
-        userRepository.save(user);
+        try {
+            userRepository.save(user);
+        }
+        catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
+            throw new AuthenticationException("User with username '" + registerRequest.getUsername() + "' already exists.") {};
+        }
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .role(user.getRoles())
                 .build();
     }
 }
