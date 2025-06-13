@@ -35,6 +35,8 @@ export interface User {
   lastName: string
   roles: Role[]
   status: Status
+  avatar?: string
+
 }
 export type Role = "ROLE_SIMPLE" | "ROLE_ADMIN" | "ROLE_SUPER_ADMIN"
 export type Status = "ACTIVE" | "BLOCKED"

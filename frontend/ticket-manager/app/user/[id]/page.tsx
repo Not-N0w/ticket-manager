@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button"
 import { IconArrowLeftDashed, IconLogout } from "@tabler/icons-react"
 
 export default function UserDetails() {
+    const minioBaseUrl = "http://localhost:9000/images/"
+
     const router = useRouter()
     const { id } = useParams<{ id: string }>()
     const [user, setUser] = useState<User | null>(null)
@@ -18,6 +20,7 @@ export default function UserDetails() {
 
     const [needUnblock, setNeedUnblock] = useState(false)
     const [needRemoveAdminRole, setNeedRemoveAdminRole] = useState(false)
+
 
 
     const logout = () => {
@@ -193,8 +196,41 @@ export default function UserDetails() {
         setNeedUnblock(
             user.status === "BLOCKED"
         )
+
+
     }, [user, userRoles])
 
+
+    const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (!file) return
+
+        const formData = new FormData()
+        formData.append("file", file)
+
+        try {
+            const res = await fetch("http://localhost:1805/api/v1/users/me/image", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+                body: formData,
+            })
+
+            if (res.ok) {
+                const updatedUser: User = await res.json()
+                setUser(updatedUser)
+                localStorage.setItem("avatar", updatedUser.avatar || "default-avatar.png")
+                window.location.href = "/user/me";
+                alert("Avatar updated successfully")
+            } else {
+                alert("Failed to upload avatar")
+            }
+        } catch (err) {
+            console.error("Avatar upload error:", err)
+            alert("Error uploading avatar")
+        }
+    }
 
     if (loading) return <div className="text-center mt-10">Loading...</div>
     if (accessDenied) return <div className="text-center mt-10 text-red-500">Access Denied</div>
@@ -206,6 +242,25 @@ export default function UserDetails() {
                     <h2 className="text-2xl font-bold text-gray-800">
                         👤 User: {user.username}
                     </h2>
+                    <div className="flex items-center gap-4">
+                        <img
+                            src={user.avatar ? `${minioBaseUrl}${user.avatar}` : "/default-avatar.png"}
+                            alt="User Avatar"
+                            className="w-24 h-24 rounded-full object-cover border"
+                        />
+
+                        {isViewingSelf && (
+                            <div>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleAvatarUpload}
+                                    className="block text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+                                />
+                            </div>
+                        )}
+                    </div>
+
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
                         <Info label="ID" value={user.id} />

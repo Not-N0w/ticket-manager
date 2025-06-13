@@ -48,7 +48,6 @@ public class AuthServiceImpl implements AuthService {
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
-                .role(user.getRoles())
                 .build();
     }
 
@@ -62,6 +61,7 @@ public class AuthServiceImpl implements AuthService {
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .roles(new HashSet<>(Collections.singleton(Role.ROLE_USER)))
                 .status(Status.ACTIVE)
+                .avatar("default-avatar.png")
                 .build();
         try {
             userRepository.save(user);
@@ -73,7 +73,6 @@ public class AuthServiceImpl implements AuthService {
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
-                .role(user.getRoles())
                 .build();
     }
 }

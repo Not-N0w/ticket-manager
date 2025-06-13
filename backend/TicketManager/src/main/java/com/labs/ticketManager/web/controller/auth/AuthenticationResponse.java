@@ -15,5 +15,4 @@ import java.util.Set;
 public class AuthenticationResponse {
     private String token;
     private String message;
-    private Set<Role> role;
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -48,6 +49,11 @@ public class User implements UserDetails {
     @NotNull
     private String password;
 
+
+    @Column(name = "avatar")
+    @NotNull
+    @NotEmpty
+    private String avatar= "default-avatar.png";
 
     @NotNull
     @Enumerated(EnumType.STRING)

@@ -2,6 +2,8 @@ package com.labs.ticketManager.service;
 
 import com.labs.ticketManager.model.user.Role;
 import com.labs.ticketManager.model.user.User;
+import com.labs.ticketManager.model.user.UserAvatar;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -13,4 +15,5 @@ public interface UserService {
     List<User> getAllUsers();
     User blockUser(Long id);
     User unblockUser(Long id);
+    void uploadAvatar(Long id, UserAvatar userAvatar);
 }

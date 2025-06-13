@@ -6,13 +6,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation"
 import { SyntheticEvent, useState } from "react"
+import { User } from "@/app/models"
 
 
 
 interface AuthResponse {
   token: string
   message: string
-  role: string[]
 }
 
 export function SignInForm({
@@ -44,7 +44,6 @@ export function SignInForm({
         const data: AuthResponse = await res.json()
 
         localStorage.setItem('token', data.token)
-        localStorage.setItem('roles', JSON.stringify(data.role))
         window.location.href = "/";
 
 
@@ -54,6 +53,29 @@ export function SignInForm({
       }
     } catch (err) {
       setError('Network error or server unavailable')
+    }
+
+    try {
+      const res = await fetch('http://localhost:1805/api/v1/users/me', {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+
+      if (res.ok) {
+        const data: User = await res.json()
+        localStorage.setItem("roles", JSON.stringify(data.roles))
+        localStorage.setItem("username", data.username)
+        localStorage.setItem("avatar", !!data.avatar ? data.avatar : "default-avatar.png")
+        window.location.href = "/";
+
+
+      } else {
+
+      }
+    } catch (err) {
+      console.error("Error fetching user:", err)
     }
   }
   return (

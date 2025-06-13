@@ -1,7 +1,5 @@
 package com.labs.ticketManager.web.dto.ticket;
 
-import com.labs.ticketManager.web.dto.CoordinatesDto;
-import com.labs.ticketManager.web.dto.PersonDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

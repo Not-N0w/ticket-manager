@@ -1,9 +1,8 @@
 package com.labs.ticketManager.web.controller;
 
 import com.labs.ticketManager.model.user.Role;
-import com.labs.ticketManager.model.user.User;
 import com.labs.ticketManager.service.UserService;
-import com.labs.ticketManager.web.dto.UserDto;
+import com.labs.ticketManager.web.dto.user.UserDto;
 import com.labs.ticketManager.web.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

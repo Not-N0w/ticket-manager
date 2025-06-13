@@ -1,7 +1,7 @@
 package com.labs.ticketManager.web.mapper;
 
 import com.labs.ticketManager.model.core.Coordinates;
-import com.labs.ticketManager.web.dto.CoordinatesDto;
+import com.labs.ticketManager.web.dto.ticket.CoordinatesDto;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

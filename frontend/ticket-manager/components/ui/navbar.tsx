@@ -7,23 +7,30 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import { IconTicket, IconUserFilled } from "@tabler/icons-react";
+import { IconDirectionArrowsFilled, IconTicket, IconUserFilled } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "./button";
 
 
 export function NavBar() {
+  const minioBaseUrl = "http://localhost:9000/images/"
+
   const router = useRouter();
 
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [roles, setRoles] = useState<string[]>([])
+  const [avatar, setAvatar] = useState("default-avatar.png")
+  const [username, setUsername] = useState("User")
 
   useEffect(() => {
     const token = localStorage.getItem('token')
     setIsAuthenticated(!!token)
     if (token) {
       const rolesString = localStorage.getItem('roles')
+      setAvatar(localStorage.getItem("avatar") || "default-avatar.png");
+      setUsername(localStorage.getItem("username") || "User")
+
       let storedRoles: string[] = []
 
       if (rolesString) {
@@ -39,8 +46,7 @@ export function NavBar() {
     }
   }, [])
 
-  const isAdmin = roles.includes("ROLE_ADMIN") || roles.includes("ROLE_SUPER_ADMIN") 
-
+  const isAdmin = roles.includes("ROLE_ADMIN") || roles.includes("ROLE_SUPER_ADMIN")
   return (
     <div className="absolute top-0 left-0 w-full z-50">
       <Menubar className="w-full flex justify-between px-4 py-5 border-b bg-white shadow-sm">
@@ -53,22 +59,25 @@ export function NavBar() {
           </button>
 
           {isAdmin && (
-            <MenubarMenu>
-              <MenubarTrigger className="cursor-pointer transition-colors">
-                Admin Panel
-              </MenubarTrigger>
-              <MenubarContent>
-                <MenubarItem className="cursor-pointer" onClick={() => router.push('/admin/users')}>All users</MenubarItem>
-                <MenubarItem className="cursor-pointer" onClick={() => router.push('/admin/admins')}>Admins</MenubarItem>
-              </MenubarContent>
-            </MenubarMenu>
+            <Button variant="ghost" className="cursor-pointer transition-colors"
+            onClick={() => router.push("/admin/users")}
+            >
+              <IconDirectionArrowsFilled />
+              Admin Panel
+            </Button>
+
           )}
         </div>
 
         <div className="flex items-center gap-4 pr-2">
           {isAuthenticated ? (
             <Button variant="ghost" onClick={() => router.push("/user/me")}>
-              <IconUserFilled className="size-5"/>
+              <img
+                src={`${minioBaseUrl}${avatar}`}
+                alt="User Avatar"
+                className="w-8 h-8 rounded-full object-cover border"
+              />
+              {username}
             </Button>
           ) : (
             <>

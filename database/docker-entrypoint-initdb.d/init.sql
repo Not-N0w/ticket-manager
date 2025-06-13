@@ -13,8 +13,10 @@ CREATE TABLE users (
                        password TEXT NOT NULL CHECK (password <> ''),
                        first_name VARCHAR(255) NOT NULL,
                        last_name VARCHAR(255) NOT NULL,
-                       status VARCHAR(20) NOT NULL
+                       status VARCHAR(20) NOT NULL,
+                       avatar VARCHAR(255) DEFAULT 'default-avatar.png'
 );
+
 
 CREATE TABLE user_roles (
                             user_id INTEGER NOT NULL,

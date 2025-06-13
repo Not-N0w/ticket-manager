@@ -30,6 +30,7 @@ public class DataInitializer implements CommandLineRunner {
                     .password(passwordEncoder.encode("admin123"))
                     .roles(Collections.singleton(Role.ROLE_SUPER_ADMIN))
                     .status(Status.ACTIVE)
+                    .avatar("default-avatar.png")
                     .build();
 
             userRepository.save(admin);
