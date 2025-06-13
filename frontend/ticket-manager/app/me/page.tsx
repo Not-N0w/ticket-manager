@@ -34,6 +34,8 @@ export default function UserDetails() {
                     setUser(data)
                 } else {
                     setUser(null)
+                    logout()
+
                 }
             } catch (err) {
                 console.error(err)

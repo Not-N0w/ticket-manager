@@ -28,7 +28,7 @@ public class DataInitializer implements CommandLineRunner {
                     .firstName("Super")
                     .lastName("Admin")
                     .password(passwordEncoder.encode("admin123"))
-                    .roles(Collections.singleton(Role.ROLE_ADMIN))
+                    .roles(Collections.singleton(Role.ROLE_SUPER_ADMIN))
                     .status(Status.ACTIVE)
                     .build();
 

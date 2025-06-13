@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation"
 interface AuthResponse {
   token: string
   message: string
-  roles: string[]
+  role: string[]
 }
 
 export function SignUpForm({
@@ -45,7 +45,7 @@ export function SignUpForm({
       if (res.ok) {
         const data: AuthResponse = await res.json()
         localStorage.setItem('token', data.token)
-        localStorage.setItem('roles', JSON.stringify(data.roles))
+        localStorage.setItem('roles', JSON.stringify(data.role))
         window.location.href = "/";
 
 

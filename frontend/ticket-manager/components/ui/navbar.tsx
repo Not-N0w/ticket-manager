@@ -27,13 +27,14 @@ export function NavBar() {
       let storedRoles: string[] = []
 
       if (rolesString) {
+        console.log(token)
         try {
           storedRoles = JSON.parse(rolesString)
+          console.log(storedRoles)
         } catch (e) {
           console.error('Roles parse error:', e)
         }
       }
-
       setRoles(storedRoles)
     }
   }, [])
