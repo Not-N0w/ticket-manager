@@ -6,7 +6,10 @@ import com.labs.ticketManager.service.UserService;
 import com.labs.ticketManager.web.dto.UserDto;
 import com.labs.ticketManager.web.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
@@ -23,5 +26,16 @@ public class UserController {
     ) {
         String username = jwtService.extractUsername(authHeader.replace("Bearer ", ""));
         User user = userService.getUserByUsername(username);
-        return userMapper.toDto(user);    }
+        return userMapper.toDto(user);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @GetMapping("/{id}")
+    public UserDto getMe(
+            @PathVariable Long id
+    ) {
+        User user = userService.getUserById(id);
+        return userMapper.toDto(user);
+    }
 }
+

@@ -67,7 +67,7 @@ export function NavBar() {
 
         <div className="flex items-center gap-4 pr-2">
           {isAuthenticated ? (
-            <Button variant="ghost" onClick={() => router.push("/me")}>
+            <Button variant="ghost" onClick={() => router.push("/user/me")}>
               <IconUserFilled className="size-5"/>
             </Button>
           ) : (

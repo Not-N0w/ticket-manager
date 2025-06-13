@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/admin")
@@ -30,19 +31,19 @@ public class AdminController {
         return userMapper.toDto(userService.removeRole(id, Role.ROLE_ADMIN));
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SUPER_ADMIN')")
     @GetMapping("/users")
     public List<UserDto> getAllUsers() {
         return userMapper.toDto(userService.getAllUsers());
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SUPER_ADMIN')")
     @PatchMapping("/users/{id}/block")
     public UserDto blockUser(@PathVariable Long id) {
         return userMapper.toDto(userService.blockUser(id));
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SUPER_ADMIN')")
     @PatchMapping("/users/{id}/unblock")
     public UserDto unblockUser(@PathVariable Long id) {
         return userMapper.toDto(userService.unblockUser(id));
