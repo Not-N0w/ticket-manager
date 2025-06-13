@@ -11,7 +11,14 @@ export default function UserDetails() {
     const { id } = useParams<{ id: string }>()
     const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true)
+
     const [accessDenied, setAccessDenied] = useState(false)
+    const [canAssignAsAdmin, setcanAssignAsAdmin] = useState(false)
+    const [canBlock, setCanBlock] = useState(false)
+
+    const [needUnblock, setNeedUnblock] = useState(false)
+    const [needRemoveAdminRole, setNeedRemoveAdminRole] = useState(false)
+
 
     const logout = () => {
         localStorage.removeItem("token")
@@ -70,58 +77,196 @@ export default function UserDetails() {
         fetchUser()
     }, [id])
 
+
+    const blockUser = async () => {
+        try {
+            const res = await fetch(`http://localhost:1805/api/v1/admin/users/${id}/block`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+            })
+            if (res.ok) {
+                alert("User blocked successfully")
+                const data: User = await res.json()
+                setUser(data)
+                router.refresh()
+            } else {
+                alert("Failed to block user")
+            }
+        } catch (err) {
+            console.error(err)
+            alert("Error while blocking user")
+        }
+    }
+
+    const assignUserAsAdmin = async () => {
+        try {
+            const res = await fetch(`http://localhost:1805/api/v1/admin/users/${id}/assign-admin-role`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+            })
+            if (res.ok) {
+                alert("User assigned as admin")
+                const data: User = await res.json()
+                setUser(data)
+                router.refresh()
+            } else {
+                alert("Failed to assign role")
+            }
+        } catch (err) {
+            console.error(err)
+            alert("Error while assigning role")
+        }
+    }
+
+
+    const unblockUser = async () => {
+        try {
+            const res = await fetch(`http://localhost:1805/api/v1/admin/users/${id}/unblock`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+            })
+            if (res.ok) {
+                alert("User unblocked successfully")
+                const data: User = await res.json()
+                setUser(data)
+                router.refresh()
+            } else {
+                alert("Failed to unblock user")
+            }
+        } catch (err) {
+            console.error(err)
+            alert("Error while unblocking user")
+        }
+    }
+
+    const removeAdminRole = async () => {
+        try {
+            const res = await fetch(`http://localhost:1805/api/v1/admin/users/${id}/remove-admin-role`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+            })
+            if (res.ok) {
+                alert("User assigned as simple")
+                const data: User = await res.json()
+                setUser(data)
+                router.refresh()
+            } else {
+                alert("Failed to assign role")
+            }
+        } catch (err) {
+            console.error(err)
+            alert("Error while assigning role")
+        }
+    }
+
+
+    useEffect(() => {
+        if (!user) return
+
+        const canBlockCheck =
+            (userRoles.includes("ROLE_SUPER_ADMIN") && !(user.roles.includes("ROLE_SUPER_ADMIN"))) ||
+            (userRoles.includes("ROLE_ADMIN") &&
+                !user.roles.includes("ROLE_ADMIN") &&
+                !user.roles.includes("ROLE_SUPER_ADMIN"))
+
+        const canAssignCheck =
+            userRoles.includes("ROLE_SUPER_ADMIN") && !user.roles.includes("ROLE_SUPER_ADMIN")
+
+        setCanBlock(canBlockCheck)
+        setcanAssignAsAdmin(canAssignCheck)
+
+        setNeedRemoveAdminRole(
+            user.roles.includes("ROLE_ADMIN") && !user.roles.includes("ROLE_SUPER_ADMIN")
+        )
+        setNeedUnblock(
+            user.status === "BLOCKED"
+        )
+    }, [user, userRoles])
+
+
     if (loading) return <div className="text-center mt-10">Loading...</div>
     if (accessDenied) return <div className="text-center mt-10 text-red-500">Access Denied</div>
     if (!user) return <div className="text-center mt-10 text-red-500">User not found</div>
-
     return (
-        <div className="w-full max-w-4xl mx-auto pt-10 px-4">
-            <div className="bg-white drop-shadow-xl rounded-2xl p-6 space-y-6">
-                <h2 className="text-2xl font-bold text-gray-800">
-                    👤 User: {user.username}
-                </h2>
+        <div className="min-h-screen flex items-center justify-center px-4">
+            <div className="w-full max-w-4xl">
+                <div className="bg-white drop-shadow-xl rounded-2xl p-6 space-y-6">
+                    <h2 className="text-2xl font-bold text-gray-800">
+                        👤 User: {user.username}
+                    </h2>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
-                    <Info label="ID" value={user.id} />
-                    <Info label="First Name" value={user.firstName} />
-                    <Info label="Last Name" value={user.lastName} />
-                    <Info label="Status" value={user.status} />
-                    <Info label="Roles" value={user.roles?.join(", ") || "No roles"} />
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
+                        <Info label="ID" value={user.id} />
+                        <Info label="First Name" value={user.firstName} />
+                        <Info label="Last Name" value={user.lastName} />
+                        <Info label="Status" value={user.status} />
+                        <Info label="Roles" value={user.roles?.join(", ") || "No roles"} />
+                    </div>
                 </div>
-            </div>
 
-            <div className="flex justify-between mt-10">
-                <Button
-                    variant="ghost"
-                    className="text-gray-500 text-sm flex items-center"
-                    onClick={() => router.back()}
-                >
-                    <IconArrowLeftDashed className="mr-2" />
-                    Back
-                </Button>
-
-                {isViewingSelf ? (
+                <div className="flex justify-between mt-10">
                     <Button
                         variant="ghost"
                         className="text-gray-500 text-sm flex items-center"
-                        onClick={logout}
+                        onClick={() => router.back()}
                     >
-                        Logout
-                        <IconLogout className="ml-2" />
+                        <IconArrowLeftDashed className="mr-2" />
+                        Back
                     </Button>
-                ) : (
-                    <div className="flex gap-2">
-                        <Button variant="outline" className="text-sm">
-                            Block
+
+                    {isViewingSelf ? (
+                        <Button
+                            variant="ghost"
+                            className="text-gray-500 text-sm flex items-center"
+                            onClick={logout}
+                        >
+                            Logout
+                            <IconLogout className="ml-2" />
                         </Button>
-                        <Button variant="outline" className="text-sm">
-                            Assign as Admin
-                        </Button>
-                    </div>
-                )}
+                    ) : (
+                        <div className="flex gap-2">
+                            {canBlock && (
+                                needUnblock ? (
+                                    <Button variant="outline" className="text-sm" onClick={unblockUser}>
+                                        Unblock
+                                    </Button>
+                                ) : (
+                                    <Button variant="outline" className="text-sm" onClick={blockUser}>
+                                        Block
+                                    </Button>
+                                )
+                            )}
+
+                            {canAssignAsAdmin && (
+                                needRemoveAdminRole ? (
+                                    < Button variant="outline" className="text-sm" onClick={removeAdminRole}>
+                                        Remove admin role
+                                    </Button>
+                                ) : (
+                                    < Button variant="outline" className="text-sm" onClick={assignUserAsAdmin}>
+                                        Assign as Admin
+                                    </Button>
+                                )
+                            )}
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
+        </div >
     )
+
 }
 
 function Info({ label, value }: { label: string; value: React.ReactNode }) {

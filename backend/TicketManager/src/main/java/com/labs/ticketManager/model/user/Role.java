@@ -8,7 +8,8 @@ public enum Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name="user_id")
+    private Long userId;
 
     @Override
     public String getAuthority() {

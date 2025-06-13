@@ -39,7 +39,7 @@ export function NavBar() {
     }
   }, [])
 
-  const isAdmin = roles.includes("ROLE_ADMIN") || roles.includes("SUPER_ADMIN") // Проверка ролей
+  const isAdmin = roles.includes("ROLE_ADMIN") || roles.includes("ROLE_SUPER_ADMIN") 
 
   return (
     <div className="absolute top-0 left-0 w-full z-50">

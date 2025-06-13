@@ -29,7 +29,7 @@ export default function UsersPage() {
         console.error("Failed to parse roles:", e)
       }
 
-      const isAdminUser = roles.includes("ROLE_ADMIN") || roles.includes("SUPER_ADMIN")
+      const isAdminUser = roles.includes("ROLE_ADMIN") || roles.includes("ROLE_SUPER_ADMIN")
       setIsAdmin(isAdminUser)
 
       if (!isAdminUser) {
@@ -55,6 +55,7 @@ export default function UsersPage() {
         setLoading(false)
       }
     }
+
 
     fetchUsers()
   }, [router])

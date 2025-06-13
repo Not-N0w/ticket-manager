@@ -36,6 +36,6 @@ export interface User {
   roles: Role[]
   status: Status
 }
-export type Role = "USER" | "ADMIN" | "SUPER_ADMIN"
-export type Status = "ACTIVE" | "BANNED"
+export type Role = "ROLE_SIMPLE" | "ROLE_ADMIN" | "ROLE_SUPER_ADMIN"
+export type Status = "ACTIVE" | "BLOCKED"
 

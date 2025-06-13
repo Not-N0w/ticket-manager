@@ -2,8 +2,9 @@ ALTER SYSTEM SET listen_addresses = '*';
 
 
 CREATE TABLE roles (
-                       id SERIAL PRIMARY KEY,
-                       name VARCHAR(50) UNIQUE NOT NULL CHECK (name <> '') -- Пример: 'ROLE_USER', 'ROLE_ADMIN'
+                       user_id SERIAL,
+                       name VARCHAR(50) UNIQUE NOT NULL CHECK (name <> ''),
+                       PRIMARY KEY(user_id, name)
 );
 
 CREATE TABLE users (
@@ -12,7 +13,7 @@ CREATE TABLE users (
                        password TEXT NOT NULL CHECK (password <> ''),
                        first_name VARCHAR(255) NOT NULL,
                        last_name VARCHAR(255) NOT NULL,
-                       status VARCHAR(20) NOT NULL -- например: 'ACTIVE', 'BLOCKED'
+                       status VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE user_roles (
