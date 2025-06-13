@@ -2,9 +2,12 @@
 
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
+  Updater,
   useReactTable,
 } from "@tanstack/react-table"
 
@@ -18,6 +21,8 @@ import {
 } from "@/components/ui/table"
 import { Button } from "../button"
 import { Separator } from "@/components/ui/separator"
+import { Input } from "../input"
+import React from "react"
 
 
 interface DataTableProps<TData, TValue> {
@@ -31,6 +36,10 @@ export function DataTable<TData, TValue>({
   data,
   pageSize = 10,
 }: DataTableProps<TData, TValue>) {
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  )
+
   const table = useReactTable({
     data,
     columns,
@@ -42,11 +51,26 @@ export function DataTable<TData, TValue>({
         pageSize: pageSize,
       },
     },
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      columnFilters
+    },
 
   })
 
   return (
     <div>
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Filter usernames..."
+          value={(table.getColumn("username")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("username")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
       <div className="h-[550px]">
         <div className="rounded-md border">
           <Table>
@@ -95,7 +119,7 @@ export function DataTable<TData, TValue>({
         </div>
 
       </div>
-            <Separator className="my-4 bg-gray-300" />
+      <Separator className="my-4 bg-gray-300" />
 
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="text-sm text-muted-foreground">
@@ -121,4 +145,8 @@ export function DataTable<TData, TValue>({
       </div>
     </div>
   )
+}
+
+function setColumnFilters(updaterOrValue: Updater<ColumnFiltersState>): void {
+  throw new Error("Function not implemented.")
 }
