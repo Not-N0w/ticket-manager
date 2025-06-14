@@ -1,4 +1,4 @@
-package com.labs.ticketManager.web.controller;
+package com.labs.ticketManager.controller;
 
 
 import com.labs.ticketManager.service.FileService;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor

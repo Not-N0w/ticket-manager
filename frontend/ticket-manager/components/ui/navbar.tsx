@@ -1,13 +1,9 @@
 'use client'
 
 import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarTrigger,
+  Menubar
 } from "@/components/ui/menubar";
-import { IconDirectionArrowsFilled, IconTicket, IconUserFilled } from "@tabler/icons-react";
+import { IconDirectionArrowsFilled, IconTicket } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "./button";

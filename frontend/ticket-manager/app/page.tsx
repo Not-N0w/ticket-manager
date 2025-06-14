@@ -1,11 +1,18 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 import { IconTicket } from '@tabler/icons-react';
 
 export default function HomePage() {
   const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(!!token);
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
@@ -16,13 +23,35 @@ export default function HomePage() {
             Ticket Manager
           </h1>
         </div>
-        <Button
-          variant="default"
-          className="text-lg px-6 py-3"
-          onClick={() => router.push('/tickets')}
-        >
-          Go to Tickets
-        </Button>
+
+        {isAuthenticated === null ? (
+          <div className="text-gray-500">Loading...</div>
+        ) : isAuthenticated ? (
+          <Button
+            variant="default"
+            className="text-lg px-6 py-3"
+            onClick={() => router.push('/tickets')}
+          >
+            Go to Tickets
+          </Button>
+        ) : (
+          <div className="flex flex-col gap-4 items-center">
+            <Button
+              variant="default"
+              className="text-lg px-6 py-3 w-48"
+              onClick={() => router.push('/sign-in')}
+            >
+              Sign In
+            </Button>
+            <Button
+              variant="outline"
+              className="text-lg px-6 py-3 w-48"
+              onClick={() => router.push('/sign-up')}
+            >
+              Sign Up
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { MoreHorizontal } from "lucide-react"
 import { Button } from "../button"
 import { useRouter } from "next/navigation"
-import { Role, User } from "@/app/models"
+import { User } from "@/app/models"
 
 
 
@@ -46,9 +46,7 @@ export const columns: ColumnDef<User>[] = [
                             <MoreHorizontal className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" sideOffset={4}
-    className="z-50 w-40 max-h-60 overflow-auto"
-    >
+                    <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem
                             onClick={() => {

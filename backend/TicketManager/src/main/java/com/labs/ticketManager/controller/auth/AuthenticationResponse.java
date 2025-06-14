@@ -1,12 +1,9 @@
-package com.labs.ticketManager.web.controller.auth;
+package com.labs.ticketManager.controller.auth;
 
-import com.labs.ticketManager.model.user.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Set;
 
 @Data
 @Builder
@@ -14,5 +11,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class AuthenticationResponse {
     private String token;
+    private String refreshToken;
     private String message;
 }

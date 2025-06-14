@@ -28,6 +28,7 @@ services:
     volumes:
       - minio-data:/data
 
+
   minio-init:
     image: minio/mc
     depends_on:
@@ -40,6 +41,8 @@ services:
       mc anonymous set download local/images;
       "
     restart: on-failure
+
+
 
   postgres:
     image: postgres

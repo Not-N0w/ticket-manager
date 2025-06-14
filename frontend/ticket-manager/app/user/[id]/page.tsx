@@ -72,6 +72,8 @@ export default function UserDetails() {
             } catch (err) {
                 console.error("Error fetching user:", err)
                 setUser(null)
+                logout()
+
             } finally {
                 setLoading(false)
             }

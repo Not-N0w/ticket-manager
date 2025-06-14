@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { SyntheticEvent, useState } from "react"
-import { useRouter } from "next/navigation"
 import { User } from "@/app/models"
 
 interface AuthResponse {
@@ -17,8 +16,6 @@ export function SignUpForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
-
-  const router = useRouter()
 
   const [username, setUsername] = useState('')
   const [firstname, setFirstname] = useState('')
@@ -54,6 +51,7 @@ export function SignUpForm({
       }
     } catch (err) {
       setError('Network error or server unavailable')
+      console.error("Error during registration:", err)
     }
     try {
       const res = await fetch('http://localhost:1805/api/v1/users/me', {

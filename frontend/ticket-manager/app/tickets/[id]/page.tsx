@@ -2,16 +2,86 @@
 
 import { Ticket } from "@/app/models"
 import { Button } from "@/components/ui/button"
-import { tickets } from "@/data/tickets"
-import { IconArrowLeftDashed } from "@tabler/icons-react"
+import { TicketFormDialog } from "@/components/ui/tickets/ticket-dialog"
+import { IconArrowLeftDashed, IconEdit } from "@tabler/icons-react"
 import { useParams, useRouter } from "next/navigation"
-
+import { useEffect, useState } from "react"
 
 export default function TicketDetails() {
   const router = useRouter()
   const params = useParams()
   const ticketId = Number(params.id)
-  const ticket: Ticket | undefined = tickets.find((item) => item.id === ticketId)
+  const [ticket, setTicket] = useState<Ticket | null>(null)
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [externalError, setExternalError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchTicket = async () => {
+      const token = localStorage.getItem("token")
+      if (!token) return
+
+      try {
+        const res = await fetch(`http://localhost:1805/api/v1/tickets/${ticketId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token,
+          },
+        })
+
+        if (!res.ok) throw new Error("Failed to fetch ticket")
+
+        const data: Ticket = await res.json()
+        setTicket(data)
+      } catch (err) {
+        console.error("Error fetching ticket:", err)
+      }
+    }
+
+    fetchTicket()
+  }, [ticketId])
+
+  const handleEditTicket = async (ticketData: Partial<Ticket>) => {
+    if (!ticket) return
+
+    const token = localStorage.getItem("token")
+    if (!token) return
+
+    setExternalError(null)
+
+    try {
+      const res = await fetch(`http://localhost:1805/api/v1/tickets/update/${ticket.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token,
+        },
+        body: JSON.stringify(ticketData),
+      })
+
+      if (!res.ok) {
+        let errorMessage = "Failed to update ticket"
+
+        try {
+          const errorData = await res.json()
+          if (errorData.message) errorMessage = errorData.message
+        } catch (jsonErr) {
+          console.error("Failed to parse error response:", jsonErr)
+        }
+
+        setExternalError(errorMessage)
+        return
+      }
+
+      const updatedTicket: Ticket = await res.json()
+      setTicket(updatedTicket)
+      setDialogOpen(false)
+    } catch (err) {
+      console.error("Unexpected fetch error:", err)
+      setExternalError("An unexpected error occurred.")
+    }
+
+  }
 
   if (!ticket) return <div>Ticket not found</div>
 
@@ -43,13 +113,24 @@ export default function TicketDetails() {
         </div>
       </div>
 
-      <Button
-        variant="ghost"
-        className="mt-10 text-gray-500 text-mf cursor-pointer"
-        onClick={() => router.back()}
-      >
-        <IconArrowLeftDashed /> back
-      </Button>
+      <div className="mt-10 flex justify-between">
+        <Button variant="ghost" className="mt-10 text-gray-500 text-mf cursor-pointer" onClick={() => router.back()}>
+          <IconArrowLeftDashed /> back
+        </Button>
+
+        <Button variant="outline" className="mt-10 text-gray-500 text-mf cursor-pointer" onClick={() => setDialogOpen(true)}>
+          <IconEdit /> Edit
+        </Button>
+
+        <TicketFormDialog
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+          onSubmit={handleEditTicket}
+          ticket={ticket}
+          isUpdate={true}
+          externalError={externalError}
+        />
+      </div>
     </div>
   )
 }

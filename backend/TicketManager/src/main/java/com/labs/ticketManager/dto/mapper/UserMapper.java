@@ -1,7 +1,7 @@
-package com.labs.ticketManager.web.mapper;
+package com.labs.ticketManager.dto.mapper;
 
 import com.labs.ticketManager.model.user.User;
-import com.labs.ticketManager.web.dto.user.UserDto;
+import com.labs.ticketManager.dto.user.UserDto;
 import org.mapstruct.Mapper;
 
 import java.util.List;

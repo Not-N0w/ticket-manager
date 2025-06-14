@@ -1,8 +1,8 @@
-package com.labs.ticketManager.web.mapper;
+package com.labs.ticketManager.dto.mapper;
 
 import com.labs.ticketManager.model.core.Ticket;
-import com.labs.ticketManager.web.dto.ticket.RequestTicketDto;
-import com.labs.ticketManager.web.dto.ticket.ResponseTicketDto;
+import com.labs.ticketManager.dto.ticket.RequestTicketDto;
+import com.labs.ticketManager.dto.ticket.ResponseTicketDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

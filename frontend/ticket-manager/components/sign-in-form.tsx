@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useRouter } from "next/navigation"
 import { SyntheticEvent, useState } from "react"
 import { User } from "@/app/models"
 
@@ -19,8 +18,6 @@ export function SignInForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
-
-  const router = useRouter();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -53,6 +50,7 @@ export function SignInForm({
       }
     } catch (err) {
       setError('Network error or server unavailable')
+      console.error("Error during login:", err)
     }
 
     try {

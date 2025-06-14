@@ -1,4 +1,4 @@
-package com.labs.ticketManager.web.dto.ticket;
+package com.labs.ticketManager.dto.ticket;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

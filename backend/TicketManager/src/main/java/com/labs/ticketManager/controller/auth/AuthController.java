@@ -1,4 +1,4 @@
-package com.labs.ticketManager.web.controller.auth;
+package com.labs.ticketManager.controller.auth;
 
 import com.labs.ticketManager.service.AuthService;
 import lombok.RequiredArgsConstructor;

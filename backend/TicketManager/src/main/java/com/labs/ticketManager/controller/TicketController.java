@@ -1,12 +1,12 @@
-package com.labs.ticketManager.web.controller;
+package com.labs.ticketManager.controller;
 
 import com.labs.ticketManager.exceptions.ActionNotPermittedException;
 import com.labs.ticketManager.exceptions.IllegalDataException;
-import com.labs.ticketManager.exceptions.ImageUploadException;
+import com.labs.ticketManager.model.SortItem;
 import com.labs.ticketManager.service.TicketService;
-import com.labs.ticketManager.web.dto.ticket.RequestTicketDto;
-import com.labs.ticketManager.web.dto.ticket.ResponseTicketDto;
-import com.labs.ticketManager.web.mapper.TicketMapper;
+import com.labs.ticketManager.dto.ticket.RequestTicketDto;
+import com.labs.ticketManager.dto.ticket.ResponseTicketDto;
+import com.labs.ticketManager.dto.mapper.TicketMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +27,13 @@ public class TicketController {
         return ticketMapper.toDto(ticketService.getAll());
     }
 
+    @PostMapping("/all-sorted")
+    public List<ResponseTicketDto> getAllSorted(
+            @RequestBody List<SortItem> sortItems
+    ) {
+        return ticketMapper.toDto(ticketService.getAllSorted(sortItems));
+    }
+
     @PostMapping("/create")
     public void create(
             @RequestBody RequestTicketDto ticket,
@@ -36,13 +43,22 @@ public class TicketController {
     }
 
     @PostMapping("/update/{id}")
-    public void create(
+    public ResponseTicketDto update(
             @PathVariable Long id,
             @RequestBody RequestTicketDto ticket,
             @RequestHeader("Authorization") String authHeader
     ) {
-        ticketService.update(id, ticketMapper.toEntity(ticket), authHeader);
+        return ticketMapper.toDto(ticketService.update(id, ticketMapper.toEntity(ticket), authHeader));
     }
+
+    @GetMapping("/{id}")
+    public ResponseTicketDto get(
+            @PathVariable Long id
+    ) {
+        return ticketMapper.toDto(ticketService.getById(id));
+    }
+
+
 
     @DeleteMapping("/delete/{id}")
     public void delete(
@@ -55,13 +71,13 @@ public class TicketController {
     @ExceptionHandler(IllegalDataException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleIllegalDataException(IllegalDataException e) {
-        return e.getMessage();
+        return Map.of("message", e.getMessage()).toString();
     }
 
     @ExceptionHandler(ActionNotPermittedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleActionNotPermitted(ActionNotPermittedException e) {
-        return e.getMessage();
+        return Map.of("message", e.getMessage()).toString();
     }
 
     @ExceptionHandler(RuntimeException.class)

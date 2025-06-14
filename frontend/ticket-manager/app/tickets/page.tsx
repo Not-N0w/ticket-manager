@@ -5,7 +5,7 @@ import { TicketsTable } from "@/components/ui/tickets/tickets-table";
 import { IconFileArrowLeft, IconSquareRoundedPlus } from "@tabler/icons-react";
 import { useEffect, useRef, useState } from "react";
 import { Ticket } from "../models";
-import { TicketFormDialog } from "@/components/ui/tickets/create-ticket-dialog";
+import { TicketFormDialog } from "@/components/ui/tickets/ticket-dialog";
 
 export default function TicketsPage() {
     const [tickets, setTickets] = useState<Ticket[]>([]);
@@ -97,7 +97,7 @@ export default function TicketsPage() {
             alert("Import failed");
         } finally {
             if (inputRef.current) {
-                inputRef.current.value = ""; // сброс input
+                inputRef.current.value = "";
             }
         }
     };
@@ -129,8 +129,8 @@ export default function TicketsPage() {
     }, []);
 
     return (
-        <div className="flex items-center justify-center min-h-screen">
-            <div className="flex flex-col w-full max-w-2xl px-4 gap-2">
+        <div className="flex items-center justify-center min-h-screen pt-15">
+            <div className="flex flex-col w-full max-w-2xl px-4 ">
                 <div className="flex gap-2 self-start">
                     <Button
                         variant="outline"
@@ -177,6 +177,29 @@ export default function TicketsPage() {
                     open={dialogOpen}
                     onOpenChange={setDialogOpen}
                     onSubmit={handleCreateTicket}
+                    ticket={{
+                        id: 0,
+                        ticketType: "USUAL",
+                        name: "",
+                        price: 0,
+                        refundable: false,
+                        creationDate: "",
+                        coordinates: {
+                            x: 0,
+                            y: 0
+                        },
+                        person: {
+                            birthday: "",
+                            weight: 0,
+                            passportId: "",
+                            location: {
+                                x: 0,
+                                y: 0,
+                                z: 0
+                            }
+                        }
+                    }}
+                    isUpdate={false}
                 />
             </div>
         </div>

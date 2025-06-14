@@ -1,12 +1,12 @@
-package com.labs.ticketManager.web.controller;
+package com.labs.ticketManager.controller;
 
 import com.labs.ticketManager.exceptions.ActionNotPermittedException;
 import com.labs.ticketManager.model.user.Role;
 import com.labs.ticketManager.model.user.User;
 import com.labs.ticketManager.service.JwtService;
 import com.labs.ticketManager.service.UserService;
-import com.labs.ticketManager.web.dto.user.UserDto;
-import com.labs.ticketManager.web.mapper.UserMapper;
+import com.labs.ticketManager.dto.user.UserDto;
+import com.labs.ticketManager.dto.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;

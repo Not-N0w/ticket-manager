@@ -65,7 +65,7 @@ export default function UsersPage() {
   if (!users.length) return <div className="text-center mt-10 text-red-500">No users found</div>
 
   return (
-    <div className="flex flex-col items-center gap-2 text-center w-1/2 m-auto mt-10">
+    <div className="flex flex-col items-center gap-2 text-center w-1/2 m-auto">
       <UsersTable users={users} />
     </div>
   )

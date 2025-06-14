@@ -1,4 +1,4 @@
-package com.labs.ticketManager.web.dto.user;
+package com.labs.ticketManager.dto.user;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

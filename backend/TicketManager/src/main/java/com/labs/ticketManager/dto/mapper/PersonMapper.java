@@ -1,7 +1,7 @@
-package com.labs.ticketManager.web.mapper;
+package com.labs.ticketManager.dto.mapper;
 
 import com.labs.ticketManager.model.core.Person;
-import com.labs.ticketManager.web.dto.ticket.PersonDto;
+import com.labs.ticketManager.dto.ticket.PersonDto;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = {LocationMapper.class})
