@@ -45,5 +45,6 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
 
     implementation("io.minio:minio:8.5.17")
+    implementation("org.apache.commons:commons-csv:1.5")
 
 }

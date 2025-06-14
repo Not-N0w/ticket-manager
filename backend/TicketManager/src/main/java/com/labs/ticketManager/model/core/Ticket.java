@@ -42,7 +42,8 @@ public class Ticket {
     @Min(0)
     private int price;
 
-    private boolean refundable;
+    @NotNull
+    private Boolean refundable = false;
 
     @NotNull
     @ManyToOne

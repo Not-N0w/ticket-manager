@@ -46,7 +46,9 @@ export const columns: ColumnDef<User>[] = [
                             <MoreHorizontal className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
+                    <DropdownMenuContent align="end" sideOffset={4}
+    className="z-50 w-40 max-h-60 overflow-auto"
+    >
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem
                             onClick={() => {

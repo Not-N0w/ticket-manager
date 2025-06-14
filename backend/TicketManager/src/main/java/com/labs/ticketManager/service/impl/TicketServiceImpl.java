@@ -44,7 +44,7 @@ public class TicketServiceImpl implements TicketService {
         }
         oldTicket.setName(ticket.getName());
         oldTicket.setPrice(ticket.getPrice());
-        oldTicket.setRefundable(ticket.isRefundable());
+        oldTicket.setRefundable(ticket.getRefundable());
         oldTicket.setTicketType(ticket.getTicketType());
         oldTicket.setCoordinates(ticket.getCoordinates());
         oldTicket.setPerson(ticket.getPerson());

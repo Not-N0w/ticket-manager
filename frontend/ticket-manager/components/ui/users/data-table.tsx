@@ -146,7 +146,3 @@ export function DataTable<TData, TValue>({
     </div>
   )
 }
-
-function setColumnFilters(updaterOrValue: Updater<ColumnFiltersState>): void {
-  throw new Error("Function not implemented.")
-}
