@@ -28,7 +28,6 @@ services:
     volumes:
       - minio-data:/data
 
-
   minio-init:
     image: minio/mc
     depends_on:
@@ -42,7 +41,14 @@ services:
       "
     restart: on-failure
 
-
+  client:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.client
+    container_name: client-container
+    ports:
+      - "3000:3000"
+    tty: true
 
   postgres:
     image: postgres
