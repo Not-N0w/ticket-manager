@@ -16,4 +16,6 @@ public interface UserService {
     User blockUser(Long id);
     User unblockUser(Long id);
     void uploadAvatar(Long id, UserAvatar userAvatar);
+    void deleteUser(Long id, User actUser);
 }
+

@@ -56,7 +56,34 @@ export const columns: ColumnDef<User>[] = [
                             Details
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={async () => {
+                                if (!confirm(`Are you sure you want to delete user "${user.username}"?`)) return;
+
+                                try {
+                                    const res = await fetch(`http://localhost:1805/api/v1/admin/users/${user.id}/remove`, {
+                                        method: 'DELETE',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                                        },
+                                    });
+
+                                    if (res.ok) {
+                                        alert('User deleted successfully');
+                                        window.location.reload();
+                                    } else {
+                                        const err = await res.json();
+                                        alert(`Error: ${err.message || 'Failed to delete user'}`);
+                                    }
+                                } catch (err) {
+                                    console.error(err);
+                                    alert('Network error. Could not delete user.');
+                                }
+                            }}
+                        >
+                            Delete
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             )

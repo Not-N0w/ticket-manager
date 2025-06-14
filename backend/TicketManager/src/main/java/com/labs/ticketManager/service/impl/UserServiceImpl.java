@@ -1,5 +1,6 @@
 package com.labs.ticketManager.service.impl;
 
+import com.labs.ticketManager.exceptions.ActionNotPermittedException;
 import com.labs.ticketManager.model.user.Role;
 import com.labs.ticketManager.model.user.Status;
 import com.labs.ticketManager.model.user.User;
@@ -12,13 +13,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ImageService imageService;
+    private JwtServiceImpl jwtService;
 
     @Override
     public User getUserById(Long id) {
@@ -28,6 +29,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public void deleteUser(Long id, User actUser) {
+        User user = getUserById(id);
+
+        boolean isPermitted = (
+                (actUser.getRoles().contains(Role.ROLE_SUPER_ADMIN) && !user.getRoles().contains(Role.ROLE_SUPER_ADMIN)) ||
+                        (actUser.getRoles().contains(Role.ROLE_ADMIN) && !user.getRoles().contains(Role.ROLE_ADMIN))
+        );
+        if (isPermitted) {
+            userRepository.deleteById(id);
+        }
+        else {
+            throw new ActionNotPermittedException("You are not permitted to delete this User");
+        }
+
     }
 
     @Override

@@ -1,6 +1,9 @@
 package com.labs.ticketManager.service.impl;
 
+import com.labs.ticketManager.exceptions.ActionNotPermittedException;
+import com.labs.ticketManager.exceptions.IllegalDataException;
 import com.labs.ticketManager.model.core.Ticket;
+import com.labs.ticketManager.model.user.Role;
 import com.labs.ticketManager.model.user.User;
 import com.labs.ticketManager.repository.TicketRepository;
 import com.labs.ticketManager.service.JwtService;
@@ -26,8 +29,18 @@ public class TicketServiceImpl implements TicketService {
         Ticket oldTicket = ticketRepository
                             .findById(id.toString())
                             .orElseThrow(() -> new RuntimeException("Ticket not found"));
-        if (!oldTicket.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("You are not allowed to update this ticket");
+        boolean permitted = (
+                (oldTicket.getUser().getId().equals(user.getId())) ||
+                        (!oldTicket.getUser().getRoles().contains(Role.ROLE_SUPER_ADMIN) && user.getRoles().contains(Role.ROLE_SUPER_ADMIN)) ||
+                        (
+                                !oldTicket.getUser().getRoles().contains(Role.ROLE_ADMIN) &&
+                                        !oldTicket.getUser().getRoles().contains(Role.ROLE_SUPER_ADMIN) &&
+                                        user.getRoles().contains(Role.ROLE_ADMIN)
+                        )
+        );
+
+        if (!permitted) {
+            throw new ActionNotPermittedException("You are not allowed to update this ticket");
         }
         oldTicket.setName(ticket.getName());
         oldTicket.setPrice(ticket.getPrice());
@@ -44,8 +57,19 @@ public class TicketServiceImpl implements TicketService {
         Ticket oldTicket = ticketRepository
                 .findById(id.toString())
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
-        if (!oldTicket.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("You are not allowed to update this ticket");
+
+        boolean permitted = (
+                (oldTicket.getUser().getId().equals(user.getId())) ||
+                (!oldTicket.getUser().getRoles().contains(Role.ROLE_SUPER_ADMIN) && user.getRoles().contains(Role.ROLE_SUPER_ADMIN)) ||
+                (
+                        !oldTicket.getUser().getRoles().contains(Role.ROLE_ADMIN) &&
+                        !oldTicket.getUser().getRoles().contains(Role.ROLE_SUPER_ADMIN) &&
+                        user.getRoles().contains(Role.ROLE_ADMIN)
+                )
+                );
+
+        if (!permitted) {
+            throw new ActionNotPermittedException("You are not allowed to update this ticket");
         }
         ticketRepository.delete(oldTicket);
     }
@@ -54,7 +78,12 @@ public class TicketServiceImpl implements TicketService {
     public void create(Ticket ticket, String authHeader) {
         User user = userService.getUserByUsername(jwtService.extractUsername(authHeader.substring(7)));
         ticket.setUser(user);
-        ticketRepository.save(ticket);
+        try {
+            ticketRepository.save(ticket);
+        }
+        catch (Exception e) {
+            throw new IllegalDataException("Unable to save ticket with those parameters");
+        }
     }
 
     @Override

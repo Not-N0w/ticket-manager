@@ -62,7 +62,43 @@ export const columns: ColumnDef<Ticket>[] = [
                             Details
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={async () => {
+                                if (!confirm(`Are you sure you want to delete ticket with id = "${ticket.id}"?`)) return;
+
+                                try {
+                                    const res = await fetch(`http://localhost:1805/api/v1/tickets/delete/${ticket.id}`, {
+                                        method: 'DELETE',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                                        },
+                                    });
+
+                                    if (res.ok) {
+                                        alert('Ticket deleted successfully');
+                                        window.location.reload();
+                                    } else {
+                                        let errorMessage = 'Failed to delete ticket';
+
+                                        const contentType = res.headers.get("content-type");
+                                        if (contentType?.includes("application/json")) {
+                                            const json = await res.json();
+                                            errorMessage = json.message || errorMessage;
+                                        } else {
+                                            const text = await res.text();
+                                            if (text) errorMessage = text;
+                                        }
+
+                                        alert(`Error: ${errorMessage}`);
+                                    }
+                                } catch (err) {
+                                    console.error("Network error:", err);
+                                    alert('Network error. Could not delete ticket.');
+                                }
+                            }}
+
+                        >Delete</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             )
