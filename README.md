@@ -2,13 +2,14 @@
 
 A full-stack ticket management system with role-based access control, built with **Spring Boot**, **Hibernate**, **PostgreSQL**, **Next.js**, and **TypeScript**. The system supports admin features, CSV import/export, file storage via **MinIO**, and Docker-based deployment.
 
-<div align="center">
-  <img src="screenshots/1.png" alt="Game Window" width="500"/>
-  <br/>
-  <img src="screenshots/2.png" alt="Choose Difficulty" width="500"/>
-  <br/>
-  <img src="screenshots/3.png" alt="Gameplay Demo" width="500"/>
-</div>
+<p align="center">
+  <img src="screenshots/1.png" alt="Main Window" width="48%" style="margin-right: 2%;" />
+  <img src="screenshots/2.png" alt="Conversion Example" width="48%" />
+</p>
+
+<p align="center">
+  <img src="screenshots/3.png" alt="App Demo" width="600"/>
+</p>
 
 ---
 
